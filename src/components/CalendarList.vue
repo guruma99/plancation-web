@@ -3,9 +3,7 @@
     <div class="top">
       <p class="fs_11">{{ item?.calendarTitle }}</p>
       <div class="profileWrap">
-        <div
-          :style="{ 'background-image': 'url(https://firebasestorage.googleapis.com/v0/b/plancation-74a7a.appspot.com/o/Apps%2Fdefault_user_image.png?alt=media&token=24c09b27-9fd8-4604-8900-3f9c16c14452)' }"
-          class="avatar"></div>
+        <div :style="{ 'background-image': `url(${getUserImage(item)})` }" class="avatar"></div>
       </div>
     </div>
     <div class="bottom">
@@ -21,21 +19,59 @@
 </template>
 <script lang="ts">
 import { getAuth } from 'firebase/auth'
+import { getDoc, getFirestore, doc } from "firebase/firestore";
 export default {
   props: {
     myCalendars: Object,
+    calendarUsers: Array,
+    userProfileInfo: Array,
   },
   data() {
     return {
-      user: ''
+      user: '',
+      userProfile: [] as any[]
     }
   },
 
   created() {
     this.loadCurrentUserProfile()
+    this.findUserCollections()
   },
 
+  computed: {
+    filteredUserProfiles() {
+      const filteredProfiles = this.myCalendars.map(calendar => {
+        const user = this.userProfile.find(profile => calendar.calendarUsers.includes(profile.userUID));
+        if (user) {
+          return {
+            ...calendar,
+            userImage: user.user.imageURL
+          };
+        } else {
+          return {
+            ...calendar,
+            userImage: "https://firebasestorage.googleapis.com/v0/b/plancation-74a7a.appspot.com/o/Apps%2Fdefault_user_image.png?alt=media&token=24c09b27-9fd8-4604-8900-3f9c16c14452"
+          };
+        }
+      });
+
+      return filteredProfiles;
+    }
+  },
+
+
   methods: {
+    // 유저 프로필 이미지 가져오기
+    getUserImage(calendar) {
+      const user = this.userProfile.find(profile => calendar.calendarUsers.includes(profile.userUID));
+
+      if (user) {
+        return user.user.imageURL;
+      } else {
+        return "https://firebasestorage.googleapis.com/v0/b/plancation-74a7a.appspot.com/o/Apps%2Fdefault_user_image.png?alt=media&token=24c09b27-9fd8-4604-8900-3f9c16c14452";
+      }
+    },
+
     //현재 로그인한 사용자의 프로필 정보를 가져오기
     async loadCurrentUserProfile() {
       const auth = getAuth();
@@ -46,6 +82,29 @@ export default {
       }
       catch (err) { console.log(err) }
       return
+    },
+
+    //유저 프로필정보 찾기
+    async findUserCollections() {
+      const db = getFirestore();
+      this.calendarUsers.forEach(async (userUID: string) => {
+        // const userUID = userObj.userUID;
+        const userDoc = doc(db, "Users", userUID);
+        try {
+          await getDoc(userDoc)
+            .then((docSnap) => {
+              this.userProfile.push({
+                user: docSnap.data(),
+              });
+
+            })
+            .catch((e) => { alert(e.message) })
+        }
+        catch (e) {
+          alert(e.message)
+        }
+      });
+      return console.log(this.userProfile)
     },
 
     //캘린더 목록에서 선택하면 해당 캘린더로 페이지 넘어가기

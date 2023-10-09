@@ -83,7 +83,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { ref, reactive, onMounted } from 'vue';
 import { getAuth } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import { doc, getDoc, getFirestore, setDoc, collection } from 'firebase/firestore';
 import { useRoute, useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -114,7 +114,7 @@ const getCalendars = async () => {
   const db = getFirestore();
   const yourCalendars = doc(db, 'Calendars', `${state.calendarID}`);
   try {
-    const docSnap = await getDoc(yourCalendars)
+    await getDoc(yourCalendars)
       .then((docSnap) => {
         if (docSnap.exists()) {
           state.calendarUser = docSnap.data().calendarUsers.map((user) => ({
@@ -135,23 +135,23 @@ const getCalendars = async () => {
 const findUserCollections = async () => {
   const db = getFirestore();
   state.calendarUser.forEach(async (user: any) => {
-    // const userUid = userObj.userUID;
-    const userDoc = doc(db, "Users", user.userUID);
+    console.log(user.userUID); // 로깅 추가
+    const userDoc = doc(db, 'Users', user.userUID);
     try {
-      const docSnap = await getDoc(userDoc)
+      await getDoc(userDoc)
         .then((docSnap) => {
           state.userProfile.push({
             user: docSnap.data(),
             checked: false
           });
         })
-        .catch((e) => { console.log(e.message) })
+        .catch((e) => { alert(e.message) })
     }
     catch (e) {
-      console.log(e.message)
+      alert(e.message)
     }
-    return;
   });
+  return;
 };
 
 //모달열기
@@ -225,7 +225,7 @@ const __addTodo = async () => {
     const db = getFirestore();
 
     //랜덤 ID로 문서생성
-    const docRef = await setDoc(doc(db, `Calendars/${state.calendarID}/Todos`, state.randomID), {
+    await setDoc(doc(db, `Calendars/${state.calendarID}/Todos`, state.randomID), {
       todoAlerts: state.alertType == "" ? 0 : state.alertType.number,
       todoAuthorID: user.uid,
       todoCheckUsers: [],
