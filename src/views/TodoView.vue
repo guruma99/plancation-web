@@ -143,6 +143,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
-@import '../assets/scss/pages/todo.css'
+@import '../assets/scss/pages/todo.css';
 </style>

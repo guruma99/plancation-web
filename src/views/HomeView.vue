@@ -13,7 +13,12 @@
             <!-- 캘린더 리스트 컴포넌트 -->
             <CalendarList :myCalendars="calendarList" :calendarUsers="calendarUsers" :userProfileInfo="userProfile" />
             <div class="addCalendar" @click="isActiveTrue()" :class="{ active: isActive }">
-              <img class="add_icon" src="@/assets/images/main/icon_addCalendar.svg" alt="캘린더추가아이콘">
+              <!-- 캘린더 추가 아이콘 -->
+              <svg class="add_icon" width="26" height="26" viewBox="0 0 26 26" fill="none"
+                xmlns="http://www.w3.org/2000/svg" alt="캘린더추가아이콘">
+                <path d="M11.6071 26V14.3929H0V11.6071H11.6071V0H14.3929V11.6071H26V14.3929H14.3929V26H11.6071Z"
+                  fill="#494B7C" />
+              </svg>
               <p>새로운 캘린더 추가</p>
             </div>
           </div>

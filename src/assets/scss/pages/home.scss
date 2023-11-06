@@ -145,10 +145,11 @@
 
             transition: all 200ms ease;
 
-            // img {
-            //   fill: #fff;
-            //   stroke: #fff;
-            // }
+            img {
+              width: 1.5rem;
+              fill: #fff;
+              stroke: #fff;
+            }
 
             p {
               padding-top: 1.5rem;
@@ -156,13 +157,13 @@
             }
 
             &:hover {
-              // background-color: var(--pbtn-hover);
               background-color: var(--main);
               border: none;
-              .add_icon {
-                fill: white;
-                stroke: #fff;
+
+              path {
+                fill: #fff;
               }
+
               p {
                 color: #fff;
               }

@@ -118,6 +118,11 @@
   align-items: center;
   transition: all 200ms ease;
 }
+.home .fixMenu .fixHeaderBar .mainScreen .CalendarListWrap .addCalendar img {
+  width: 1.5rem;
+  fill: #fff;
+  stroke: #fff;
+}
 .home .fixMenu .fixHeaderBar .mainScreen .CalendarListWrap .addCalendar p {
   padding-top: 1.5rem;
   color: var(--sub-bold);
@@ -126,9 +131,8 @@
   background-color: var(--main);
   border: none;
 }
-.home .fixMenu .fixHeaderBar .mainScreen .CalendarListWrap .addCalendar:hover .add_icon {
-  fill: white;
-  stroke: #fff;
+.home .fixMenu .fixHeaderBar .mainScreen .CalendarListWrap .addCalendar:hover path {
+  fill: #fff;
 }
 .home .fixMenu .fixHeaderBar .mainScreen .CalendarListWrap .addCalendar:hover p {
   color: #fff;
