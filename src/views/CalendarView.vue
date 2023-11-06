@@ -23,6 +23,7 @@ export default {
   components: {
     SideBar,
     HeaderBar,
+
   }
 }
 </script>
